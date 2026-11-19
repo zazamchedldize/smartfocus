@@ -1,5 +1,6 @@
+
 const SUPABASE_URL = "https://rrxqfdizabgwrtydrppf.supabase.co"
-const SUPABASE_ANON_KEY = "sb_publishable_7amqMXxqc15asyXn8vIigQ_4D6XVg_s"
+const SUPABASE_ANON_KEY = "sb_publishable_7amMXxqc15asyXn8vIigQ_4D6XVg_s"
 
 const supabaseReady =
   SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
@@ -22,6 +23,34 @@ const weekdays = [
   { key: "wednesday", label: "ოთხშაბათი" },
   { key: "thursday", label: "ხუთშაბათი" },
   { key: "friday", label: "პარასკევი" }
+]
+
+const subjects = [
+  "ქართული ლიტერატურა",
+  "მათემატიკა",
+  "ქართული ენა",
+  "ინგლისური",
+  "გერმანული",
+  "რუსული",
+  "ისტორია",
+  "საქართველოს ისტორია",
+  "ხელოვნება",
+  "მუსიკა",
+  "ფიზიკა",
+  "ქიმია",
+  "მოქალაქეობა",
+  "გეოგრაფია",
+  "ბიოლოგია"
+]
+
+const lessonTimes = [
+  { start: "09:00", end: "09:45" },
+  { start: "09:50", end: "10:35" },
+  { start: "10:40", end: "11:25" },
+  { start: "11:35", end: "12:20" },
+  { start: "12:25", end: "13:10" },
+  { start: "13:15", end: "14:00" },
+  { start: "14:05", end: "14:50" }
 ]
 
 let currentUser = null
@@ -95,7 +124,7 @@ function showToast(message) {
 }
 
 function showConfigurationWarning() {
-  showAuthMessage("საიტი ჯერ Supabase-ს არ უკავშირდება. ჩასვი Project URL და anon public key.")
+  showAuthMessage("საიტი ჯერ Supabase-ს არ უკავშირდება. შეამოწმე Project URL და Publishable Key.")
 }
 
 function getFormData(form) {
@@ -302,7 +331,7 @@ function renderTimetableSummary() {
       <div class="empty-state">
         <span>▦</span>
         <strong>ცხრილი ჯერ არ დაგიმატებია</strong>
-        <small>დაამატე გაკვეთილების დაწყებისა და დასრულების დროები თითოეული დღისთვის.</small>
+        <small>აირჩიე საგნები თითოეული დღისთვის და Smart Focus ავტომატურად შექმნის შენს განრიგს.</small>
       </div>
     `
     return
@@ -322,7 +351,15 @@ function renderTimetableSummary() {
       <div class="day-summary">
         <div class="day-name">${day.label}</div>
         <div class="day-summary-content">
-          ${dayLessons.map(lesson => `<span class="lesson-chip">${lesson.lesson_number}. ${formatTime(lesson.start_time)}–${formatTime(lesson.end_time)}</span>`).join("")}
+          ${dayLessons.map(lesson => `
+            <div class="timetable-lesson">
+              <span class="timetable-lesson-number">${lesson.lesson_number}</span>
+              <div class="timetable-lesson-info">
+                <strong>${lesson.subject || "საგანი"}</strong>
+                <small>${formatTime(lesson.start_time)} – ${formatTime(lesson.end_time)}</small>
+              </div>
+            </div>
+          `).join("")}
           <span class="reminder-chip">შეხსენება · ${reminder}</span>
         </div>
       </div>
@@ -330,19 +367,67 @@ function renderTimetableSummary() {
   }).join("")
 }
 
-function createLessonRow(start = "", end = "") {
+function createLessonRow(subject = "") {
   const row = document.createElement("div")
   row.className = "lesson-row"
 
-  row.innerHTML = `
-    <input type="time" class="lesson-start" aria-label="გაკვეთილის დაწყების დრო" value="${start}" required>
-    <input type="time" class="lesson-end" aria-label="გაკვეთილის დასრულების დრო" value="${end}" required>
-    <button type="button" class="remove-lesson" aria-label="გაკვეთილის წაშლა">×</button>
-  `
+  const select = document.createElement("select")
+  select.className = "lesson-subject"
+  select.setAttribute("aria-label", "აირჩიე საგანი")
+  select.required = true
 
-  row.querySelector(".remove-lesson").addEventListener("click", () => row.remove())
+  const placeholder = document.createElement("option")
+  placeholder.value = ""
+  placeholder.textContent = "აირჩიე საგანი"
+  select.appendChild(placeholder)
+
+  subjects.forEach(item => {
+    const option = document.createElement("option")
+    option.value = item
+    option.textContent = item
+
+    if (item === subject) {
+      option.selected = true
+    }
+
+    select.appendChild(option)
+  })
+
+  const removeButton = document.createElement("button")
+  removeButton.type = "button"
+  removeButton.className = "remove-lesson"
+  removeButton.textContent = "×"
+  removeButton.setAttribute("aria-label", "გაკვეთილის წაშლა")
+
+  const timeLabel = document.createElement("span")
+  timeLabel.className = "lesson-row-time"
+
+  row.append(select, timeLabel, removeButton)
+
+  removeButton.addEventListener("click", () => {
+    row.remove()
+    updateLessonRowNumbers(row.closest(".schedule-day"))
+  })
 
   return row
+}
+
+function updateLessonRowNumbers(section) {
+  if (!section) return
+
+  const rows = section.querySelectorAll(".lesson-row")
+
+  rows.forEach((row, index) => {
+    const time = lessonTimes[index]
+    row.querySelector(".lesson-row-time").textContent =
+      `${index + 1}. ${time.start} – ${time.end}`
+  })
+
+  const addButton = section.querySelector(".add-lesson")
+  addButton.disabled = rows.length >= 7
+  addButton.textContent = rows.length >= 7
+    ? "მაქსიმუმ 7 გაკვეთილი"
+    : "+ გაკვეთილის დამატება"
 }
 
 function openTimetableModal() {
@@ -364,22 +449,23 @@ function openTimetableModal() {
         <button class="add-lesson" type="button">+ გაკვეთილის დამატება</button>
       </div>
       <div class="lesson-rows"></div>
-      <div class="day-hint">შესვენება ავტომატურად განისაზღვრება ერთი გაკვეთილის დასრულებასა და მომდევნოს დაწყებას შორის.</div>
+      <div class="day-hint">აირჩიე საგნები თანმიმდევრობით. დროები ავტომატურად განისაზღვრება.</div>
     `
 
     const rows = section.querySelector(".lesson-rows")
 
     existing.forEach(lesson => {
-      rows.appendChild(createLessonRow(
-        formatTime(lesson.start_time),
-        formatTime(lesson.end_time)
-      ))
+      rows.appendChild(createLessonRow(lesson.subject || ""))
     })
 
     section.querySelector(".add-lesson").addEventListener("click", () => {
+      if (rows.children.length >= 7) return
+
       rows.appendChild(createLessonRow())
+      updateLessonRowNumbers(section)
     })
 
+    updateLessonRowNumbers(section)
     wrapper.appendChild(section)
   })
 
@@ -404,30 +490,34 @@ function collectTimetable() {
   document.querySelectorAll(".schedule-day").forEach(section => {
     const weekday = section.dataset.weekday
     const rows = [...section.querySelectorAll(".lesson-row")]
+    const selectedSubjects = []
 
-    const dayLessons = rows.map((row, index) => ({
-      weekday,
-      lesson_number: index + 1,
-      start_time: row.querySelector(".lesson-start").value,
-      end_time: row.querySelector(".lesson-end").value
-    }))
+    rows.forEach((row, index) => {
+      const subject = row.querySelector(".lesson-subject").value
+      const dayName = weekdays.find(day => day.key === weekday).label
 
-    dayLessons.forEach((lesson, index) => {
-      if (!lesson.start_time || !lesson.end_time) {
-        errors.push(`${weekdays.find(day => day.key === weekday).label}: შეავსე ყველა დრო.`)
+      if (!subject) {
+        errors.push(`${dayName}: აირჩიე ${index + 1} გაკვეთილის საგანი.`)
         return
       }
 
-      if (lesson.start_time >= lesson.end_time) {
-        errors.push(`${weekdays.find(day => day.key === weekday).label}: გაკვეთილის დასრულება დაწყებაზე გვიან უნდა იყოს.`)
+      if (selectedSubjects.includes(subject)) {
+        errors.push(`${dayName}: ერთი და იგივე საგანი ორჯერ არ აირჩიო.`)
+        return
       }
 
-      if (index > 0 && dayLessons[index - 1].end_time > lesson.start_time) {
-        errors.push(`${weekdays.find(day => day.key === weekday).label}: გაკვეთილები ერთმანეთს არ უნდა ფარავდეს და სწორი თანმიმდევრობით უნდა იყოს.`)
-      }
+      selectedSubjects.push(subject)
+
+      const time = lessonTimes[index]
+
+      lessons.push({
+        weekday,
+        lesson_number: index + 1,
+        subject,
+        start_time: time.start,
+        end_time: time.end
+      })
     })
-
-    lessons.push(...dayLessons)
   })
 
   return { lessons, errors }
@@ -446,7 +536,7 @@ document.getElementById("save-timetable").addEventListener("click", async () => 
   }
 
   if (!lessons.length) {
-    feedback.textContent = "დაამატე მინიმუმ ერთი გაკვეთილი."
+    feedback.textContent = "აირჩიე მინიმუმ ერთი გაკვეთილი."
     feedback.style.color = "var(--danger)"
     return
   }
@@ -467,6 +557,7 @@ document.getElementById("save-timetable").addEventListener("click", async () => 
       user_id: currentUser.id,
       weekday: lesson.weekday,
       lesson_number: lesson.lesson_number,
+      subject: lesson.subject,
       start_time: lesson.start_time,
       end_time: lesson.end_time
     }))
