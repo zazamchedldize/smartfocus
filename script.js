@@ -1,6 +1,6 @@
 
 const SUPABASE_URL = "https://rrxqfdizabgwrtydrppf.supabase.co"
-const SUPABASE_ANON_KEY = "sb_publishable_7amMXxqc15asyXn8vIigQ_4D6XVg_s"
+const SUPABASE_ANON_KEY = "sb_publishable_7amqMXxqc15asyXn8vIigQ_4D6XVg_s"
 
 const supabaseReady =
   SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
