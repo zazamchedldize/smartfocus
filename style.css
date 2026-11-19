@@ -247,3 +247,119 @@ button { cursor: pointer; }
   .modal-footer { align-items: stretch; flex-direction: column; }
   .modal-footer .button { width: 100%; }
 }
+
+
+.lesson-row {
+  grid-template-columns: minmax(0, 1fr) 145px 34px;
+}
+
+.lesson-row select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid rgba(174,196,222,.14);
+  border-radius: 9px;
+  outline: none;
+  background: #0b1522;
+  color: var(--text);
+  font: inherit;
+  font-size: 10px;
+}
+
+.lesson-row select:focus {
+  border-color: rgba(85,224,166,.65);
+  box-shadow: 0 0 0 3px rgba(85,224,166,.07);
+}
+
+.lesson-row select option {
+  background: #101a29;
+  color: var(--text);
+}
+
+.lesson-row-time {
+  color: var(--green);
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.add-lesson:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.day-summary-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.timetable-lesson {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #17273a;
+  border: 1px solid rgba(174,196,222,.1);
+  border-radius: 9px;
+  min-width: 0;
+}
+
+.timetable-lesson-number {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(85,224,166,.12);
+  color: var(--green);
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.timetable-lesson-info {
+  min-width: 0;
+}
+
+.timetable-lesson-info strong {
+  display: block;
+  color: #e5edf7;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.timetable-lesson-info small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  margin-top: 5px;
+}
+
+.reminder-chip {
+  grid-column: 1 / -1;
+  width: fit-content;
+}
+
+@media (max-width: 440px) {
+  .lesson-row {
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+
+  .lesson-row-time {
+    grid-column: 1;
+    grid-row: 2;
+    text-align: left;
+    padding: 2px 0 5px;
+  }
+
+  .lesson-row .remove-lesson {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .day-summary-content {
+    grid-template-columns: 1fr;
+  }
+}
