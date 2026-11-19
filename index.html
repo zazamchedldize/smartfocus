@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080E18">
+  <meta name="description" content="Smart Focus — ავტომატური სასწავლო განრიგი და ფოკუს-პლატფორმა">
+  <title>Smart Focus — ისწავლე უფრო ჭკვიანურად</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=FiraGO:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Smart Focus მთავარი გვერდი">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span>SMART<span class="brand-accent">FOCUS</span></span>
+    </a>
+    <div class="topbar-right">
+      <span class="secure-label"><span class="secure-dot"></span> შენი სასწავლო სივრცე</span>
+      <button class="button button-ghost button-small" id="header-login" type="button">შესვლა</button>
+    </div>
+  </header>
+
+  <main id="app" class="app-shell">
+    <section id="landing-view" class="landing-view">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> SMART LEARNING PLATFORM</div>
+        <h1>შენი დრო.<br><span>შენი ფოკუსი.</span><br>შენი შედეგი.</h1>
+        <p class="hero-description">Smart Focus გეხმარება სკოლის განრიგის, დავალებებისა და მეცადინეობის სწორად დაგეგმვაში — ერთ სივრცეში.</p>
+        <div class="hero-actions">
+          <button class="button button-primary" id="start-register" type="button">შექმენი ანგარიში <span>↗</span></button>
+          <button class="button button-secondary" id="start-login" type="button">უკვე გაქვს ანგარიში?</button>
+        </div>
+        <div class="hero-proof">
+          <div class="proof-icon">45<span>/</span>15</div>
+          <div><strong>ფოკუსის რიტმი</strong><small>მეცადინეობა და შესვენება</small></div>
+          <div class="proof-divider"></div>
+          <div><strong>შენზე მორგებული</strong><small>ინდივიდუალური განრიგი</small></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual-glow"></div>
+        <div class="dashboard-preview">
+          <div class="preview-top">
+            <div><span class="preview-kicker">SMART FOCUS / OVERVIEW</span><h3>კარგი საღამოა!</h3></div>
+            <div class="avatar">SF</div>
+          </div>
+          <div class="preview-progress">
+            <div class="progress-heading"><span>დღევანდელი ფოკუსი</span><strong>75%</strong></div>
+            <div class="progress-track"><span></span></div>
+            <small>3 დასრულებული ბლოკი · 1 დარჩენილი</small>
+          </div>
+          <div class="preview-session">
+            <div class="session-icon">◷</div>
+            <div class="session-info"><strong>მათემატიკა</strong><small>კვადრატული განტოლებები</small></div>
+            <span class="session-time">45 წთ</span>
+          </div>
+          <div class="preview-session muted-session">
+            <div class="session-icon">✦</div>
+            <div class="session-info"><strong>შესვენება</strong><small>გონების განტვირთვა</small></div>
+            <span class="session-time">15 წთ</span>
+          </div>
+          <div class="preview-bottom"><span class="live-dot"></span> შენი სასწავლო დღე, ორგანიზებულად</div>
+        </div>
+        <div class="floating-note note-top"><span>✦</span><div><strong>45 + 15</strong><small>შენი ფოკუსის რიტმი</small></div></div>
+        <div class="floating-note note-bottom"><span class="note-check">✓</span><div><strong>Smart Schedule</strong><small>მორგებულია შენს ცხრილზე</small></div></div>
+      </div>
+    </section>
+
+    <section id="auth-view" class="auth-view hidden">
+      <div class="auth-intro">
+        <button class="back-link" id="back-home" type="button">← მთავარ გვერდზე</button>
+        <div class="eyebrow"><span class="eyebrow-line"></span> YOUR JOURNEY STARTS HERE</div>
+        <h1 id="auth-heading">შექმენი შენი<br><span>Smart Focus</span><br>ანგარიში.</h1>
+        <p>შეავსე მონაცემები ერთხელ და მიიღე შენზე მორგებული სასწავლო სივრცე.</p>
+        <div class="auth-benefits">
+          <div><span>01</span> შენი სკოლის ცხრილი</div>
+          <div><span>02</span> ავტომატური შეხსენებები</div>
+          <div><span>03</span> ფოკუსისა და პროგრესის კონტროლი</div>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="register-tab" type="button">რეგისტრაცია</button>
+          <button class="auth-tab" id="login-tab" type="button">შესვლა</button>
+        </div>
+
+        <form id="register-form" class="form-panel">
+          <div class="form-heading"><h2>ანგარიშის შექმნა</h2><p>მოსწავლისა და მშობლის ინფორმაცია</p></div>
+          <div class="form-section-title">მოსწავლის ინფორმაცია</div>
+          <div class="form-grid">
+            <label class="field"><span>სახელი</span><input name="firstName" autocomplete="given-name" placeholder="მაგ. ნიკა" required maxlength="60"></label>
+            <label class="field"><span>გვარი</span><input name="lastName" autocomplete="family-name" placeholder="მაგ. ბერიძე" required maxlength="60"></label>
+          </div>
+          <div class="form-grid">
+            <label class="field"><span>მოსწავლის ელფოსტა</span><input name="email" type="email" autocomplete="email" placeholder="student@example.com" required></label>
+            <label class="field"><span>ასაკი</span><input name="age" type="number" min="6" max="100" placeholder="მაგ. 15" required></label>
+          </div>
+          <div class="form-section-title">მშობლის ინფორმაცია</div>
+          <div class="form-grid">
+            <label class="field"><span>მშობლის სახელი</span><input name="parentFirstName" placeholder="მშობლის სახელი" required maxlength="60"></label>
+            <label class="field"><span>მშობლის გვარი</span><input name="parentLastName" placeholder="მშობლის გვარი" required maxlength="60"></label>
+          </div>
+          <label class="field"><span>მშობლის ელფოსტა</span><input name="parentEmail" type="email" placeholder="parent@example.com" required></label>
+          <div class="form-section-title">ანგარიშის უსაფრთხოება</div>
+          <label class="field"><span>პაროლი</span><input name="password" type="password" autocomplete="new-password" placeholder="მინიმუმ 8 სიმბოლო" minlength="8" required></label>
+          <label class="consent-row"><input type="checkbox" name="parentConsent" required><span>ვადასტურებ, რომ მშობელს/კანონიერ წარმომადგენელს ინფორმირებული აქვს ანგარიშის შექმნისა და მონაცემების გამოყენების შესახებ.</span></label>
+          <button class="button button-primary button-full" type="submit"><span class="button-label">ანგარიშის შექმნა</span><span>↗</span></button>
+          <p class="form-footnote">პაროლი დაცულად მუშავდება Supabase Authentication-ის საშუალებით.</p>
+        </form>
+
+        <form id="login-form" class="form-panel hidden">
+          <div class="form-heading"><h2>კეთილი იყოს შენი დაბრუნება</h2><p>შედი შენს სასწავლო სივრცეში</p></div>
+          <label class="field"><span>ელფოსტა</span><input name="email" type="email" autocomplete="email" placeholder="შენი ელფოსტა" required></label>
+          <label class="field"><span>პაროლი</span><input name="password" type="password" autocomplete="current-password" placeholder="შენი პაროლი" required></label>
+          <button class="button button-primary button-full" type="submit"><span class="button-label">შესვლა</span><span>↗</span></button>
+          <p class="form-footnote">თუ ელფოსტა ჯერ არ დაგიდასტურებია, შეამოწმე შემოსული წერილები.</p>
+        </form>
+        <div id="auth-message" class="message hidden" role="status"></div>
+      </div>
+    </section>
+
+    <section id="dashboard-view" class="dashboard-view hidden">
+      <aside class="sidebar">
+        <a class="brand sidebar-brand" href="#"><span class="brand-mark"><span></span><span></span><span></span></span><span>SMART<span class="brand-accent">FOCUS</span></span></a>
+        <div class="sidebar-label">WORKSPACE</div>
+        <button class="side-link active" type="button"><span>⌂</span> მთავარი</button>
+        <button class="side-link" id="side-timetable" type="button"><span>▦</span> სკოლის ცხრილი</button>
+        <div class="sidebar-bottom">
+          <div class="user-mini"><div class="user-avatar" id="user-avatar">S</div><div><strong id="sidebar-name">მოსწავლე</strong><small>მოსწავლის ანგარიში</small></div></div>
+          <button class="side-link logout-link" id="logout-button" type="button"><span>↪</span> გასვლა</button>
+        </div>
+      </aside>
+      <div class="dashboard-main">
+        <header class="dashboard-header"><div><span class="dashboard-date" id="today-label"></span><h1>მოგესალმები, <span id="student-name">მოსწავლე</span>!</h1><p>დაგეგმე შენი დღე და იმოძრავე მიზნისკენ.</p></div><div class="header-status"><span class="live-dot"></span> პირადი სივრცე</div></header>
+        <div class="dashboard-grid">
+          <section class="welcome-card">
+            <div><span class="card-kicker">SMART FOCUS</span><h2>ყოველი დღე<br>ახალი შესაძლებლობაა.</h2><p>დაამატე სკოლის განრიგი, რათა Smart Focus-მა შენი მეცადინეობის დრო გამოთვალოს.</p><button class="button button-light" id="edit-timetable" type="button">ცხრილის დამატება <span>→</span></button></div>
+            <div class="welcome-art"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="focus-symbol">SF</div></div>
+          </section>
+          <section class="stat-card"><span class="stat-label">სკოლის დღეები</span><strong id="days-count">0<span>/5</span></strong><small>შევსებული დღე</small><div class="stat-decoration">▦</div></section>
+          <section class="stat-card"><span class="stat-label">გაკვეთილები</span><strong id="lessons-count">0</strong><small>შენახული გაკვეთილი</small><div class="stat-decoration">◷</div></section>
+          <section class="timetable-card" id="timetable-section">
+            <div class="section-heading"><div><span class="card-kicker">YOUR SCHOOL WEEK</span><h2>ჩემი სკოლის ცხრილი</h2></div><button class="text-button" id="add-timetable" type="button">რედაქტირება ↗</button></div>
+            <div id="timetable-summary" class="timetable-summary"><div class="empty-state"><span>▦</span><strong>ცხრილი ჯერ არ დაგიმატებია</strong><small>დაამატე გაკვეთილების დაწყებისა და დასრულების დროები თითოეული დღისთვის.</small></div></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="timetable-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="timetable-title">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-card timetable-modal-card">
+      <div class="modal-header"><div><span class="card-kicker">PERSONAL SCHOOL SCHEDULE</span><h2 id="timetable-title">სკოლის ცხრილი</h2><p>შეიყვანე თითოეული გაკვეთილის დაწყებისა და დასრულების დრო.</p></div><button class="icon-button" id="close-modal" type="button" aria-label="დახურვა">×</button></div>
+      <div class="schedule-notice"><strong>როგორ გამოვთვლით შეხსენებას?</strong><span>ბოლო გაკვეთილის დასრულებიდან 15 წუთში. შესვენებები ავტომატურად გამოითვლება გაკვეთილებს შორის არსებული დროით.</span></div>
+      <div id="schedule-days" class="schedule-days"></div>
+      <div class="modal-footer"><span id="schedule-feedback" class="inline-feedback"></span><button class="button button-primary" id="save-timetable" type="button">ცხრილის შენახვა <span>↗</span></button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <footer class="site-footer"><span>© <span id="year"></span> SMART FOCUS</span><span>Study smarter. Focus better.</span></footer>
+</body>
+</html>
